@@ -14,7 +14,7 @@ env_file_path = ".env"
 log_file = "app.log"
 
 
-temp_dir = "/tmp/chatgpt-code-review"
+temp_dir = "./tmp/chatgpt-code-review"
 
 
 def app():
@@ -22,6 +22,9 @@ def app():
     utils.set_environment_variables()
     utils.configure_logging(log_file)
 
+    # The temp dir context + temp_dir is needed to temporarely clone the github repository and access the content
+    # This solution is worse from the downloading point of view, but theoretically allows for direct push to github
+    # without going crazy
     with utils.TempDirContext(temp_dir):
         st.set_page_config(
             page_title="ChatGPT Code Review",
