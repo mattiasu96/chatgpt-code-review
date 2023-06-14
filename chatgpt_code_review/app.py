@@ -1,13 +1,13 @@
 import os
 
-import about
-import display
-import download
-import forms
-import query
-import repo
+from chatgpt_code_review import about
+from chatgpt_code_review import display
+from chatgpt_code_review import download
+from chatgpt_code_review import forms
+from chatgpt_code_review import query
+from chatgpt_code_review import repo
 import streamlit as st
-import utils
+from chatgpt_code_review import utils
 
 env_file_path = ".env"
 log_file = "app.log"
