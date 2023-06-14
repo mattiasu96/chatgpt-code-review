@@ -8,6 +8,7 @@ from chatgpt_code_review import query
 from chatgpt_code_review import repo
 import streamlit as st
 from chatgpt_code_review import utils
+from chatgpt_code_review.utils import remove_sidebar
 
 env_file_path = ".env"
 log_file = "app.log"
@@ -24,7 +25,10 @@ def app():
     with utils.TempDirContext(temp_dir):
         st.set_page_config(
             page_title="ChatGPT Code Review",
+            initial_sidebar_state="collapsed"
         )
+
+        remove_sidebar()
 
         session_state = st.session_state
 

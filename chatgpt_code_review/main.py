@@ -1,14 +1,16 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
+from chatgpt_code_review.utils import remove_sidebar
 
 st.set_page_config(
     page_title="Hello",
     page_icon="👋",
+    initial_sidebar_state="collapsed"
 )
 
-st.write("# Welcome to Streamlit! 👋")
+remove_sidebar()
 
-st.sidebar.success("Select a demo above.")
+st.write("# Welcome to Streamlit! 👋")
 
 st.markdown(
     """
