@@ -44,7 +44,8 @@ class RepoForm:
                 [ext.strip() for ext in self.additional_extensions.split(",")]
             )
 
-        self.clone_repo_button = st.form_submit_button("Clone Repository")
+        self.clone_repo_button = st.form_submit_button("Clone Repository", on_click=lambda: st.session_state.update(
+            {'submitted_form': True}))
 
     def get_form_data(self):
         """Returns the data captured by the repository form."""

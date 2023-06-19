@@ -9,6 +9,7 @@ from chatgpt_code_review import repo
 import streamlit as st
 from chatgpt_code_review import utils
 from chatgpt_code_review.utils import remove_sidebar
+from streamlit_extras.switch_page_button import switch_page
 
 env_file_path = ".env"
 log_file = "app.log"
@@ -16,6 +17,7 @@ log_file = "app.log"
 
 temp_dir = "./tmp/chatgpt-code-review"
 
+session_state = st.session_state
 
 def app():
     utils.load_environment_variables(env_file_path)
@@ -33,13 +35,15 @@ def app():
 
         remove_sidebar()
 
-        session_state = st.session_state
-
         st.title("Insert credentials 🐱‍💻")
 
         repo_form = forms.RepoForm()
         with st.form("repo_url_form"):
             repo_form.display_form()
+
+        if 'submitted_form' not in session_state:
+            print('Initializing session state')
+            session_state['submitted_form'] = False
 
         # Explanation of the code:
         # This section ensures that the code does not proceed if the 'clone_repo_button' is not clicked.
@@ -47,12 +51,42 @@ def app():
         # When the button is clicked, its value becomes True, indicating that data should be loaded.
         # However, if the URL or API key are not valid, the code will break.
         # In such a case, 'st.stop()' is triggered, and the code stops execution.
-        if repo_form.clone_repo_button and not repo_form.is_github_repo_valid() and not repo_form.is_api_key_valid():
+        if session_state['submitted_form'] and not repo_form.is_github_repo_valid() and not repo_form.is_api_key_valid():
             st.stop()
 
-        if repo_form.clone_repo_button and repo_form.is_github_repo_valid() and repo_form.is_api_key_valid():
-            st.button("AD-hoc review on selected code")
-            st.button("Overall review")
+        # So the trick is to add if statements to the variable to avoid the reset because of streamlit rerunning code
+        # TODO: Please find a better way to do this it's horrible. Probavbly there's some hidden catch to manage this
+        #  streamoit behaviour
+        if 'valid_credentials' not in session_state:
+            print('Initializing session state')
+            session_state['valid_credentials'] = False
+
+        if 'overall_review' not in session_state:
+            print('Initializing overall review')
+            session_state['overall_review'] = False
+
+        if 'valid_credentials' not in session_state:
+            print('Initializing session state')
+            session_state['valid_credentials'] = False
+
+        # Streamlit re-runs the whole code, so once I create the buttons I have no way of clicking them because
+        # this condition is dependent on the other button, that will be reset after i click it.
+        # TODO: find the best way to implement this
+        if session_state['submitted_form'] and repo_form.is_github_repo_valid() and repo_form.is_api_key_valid():
+            ad_hoc_review = st.button("AD-hoc review on selected code")
+            overall_review = st.button("Overall review", on_click=lambda: st.session_state.update({'overall_review': True}))
+            print('Inside positive submitted form')
+            session_state['valid_credentials'] = True
+
+        print('valid credentials outside:', session_state['valid_credentials'])
+        print('overall_review outside:', session_state['overall_review'])
+        if session_state['valid_credentials'] and session_state['overall_review']:
+            print("AOOOOOOOOO DAI CHE E' VALIDO")
+            switch_page("overall_review")
+
+        # if session_state['valid_credentials'] and session_state['ad_hoc_review']:
+        #     print("AOOOOOOOOO DAI CHE E' AD HOC")
+        #     # switch_page("overall_review")
 
         # repo_url, extensions = repo_form.get_form_data()
         #
