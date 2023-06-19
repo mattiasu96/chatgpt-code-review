@@ -14,11 +14,11 @@ from streamlit_extras.switch_page_button import switch_page
 env_file_path = ".env"
 log_file = "app.log"
 
-
 temp_dir = "./tmp/chatgpt-code-review"
 
 session_state = st.session_state
 
+# TODO: check if the usage of functions is actually necessary or not.
 def app():
     utils.load_environment_variables(env_file_path)
     utils.set_environment_variables()
@@ -70,7 +70,8 @@ def app():
         # TODO: find the best way to implement this
         if session_state['submitted_form'] and repo_form.is_github_repo_valid() and repo_form.is_api_key_valid():
             ad_hoc_review = st.button("AD-hoc review on selected code")
-            overall_review = st.button("Overall review", on_click=lambda: st.session_state.update({'overall_review': True}))
+            overall_review = st.button("Overall review",
+                                       on_click=lambda: st.session_state.update({'overall_review': True}))
             print('Inside positive submitted form')
             session_state['valid_credentials'] = True
 
@@ -84,7 +85,8 @@ def app():
         #     print("AOOOOOOOOO DAI CHE E' AD HOC")
         #     # switch_page("overall_review")
 
-        # repo_url, extensions = repo_form.get_form_data()
+        session_state['repo_url'], session_state['extensions'] = repo_form.get_form_data()
+
         #
         # analyze_files_form = forms.AnalyzeFilesForm(session_state)
         # with st.form("analyze_files_form"):
