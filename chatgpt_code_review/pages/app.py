@@ -65,10 +65,6 @@ def app():
             print('Initializing overall review')
             session_state['overall_review'] = False
 
-        if 'valid_credentials' not in session_state:
-            print('Initializing session state')
-            session_state['valid_credentials'] = False
-
         # Streamlit re-runs the whole code, so once I create the buttons I have no way of clicking them because
         # this condition is dependent on the other button, that will be reset after i click it.
         # TODO: find the best way to implement this
