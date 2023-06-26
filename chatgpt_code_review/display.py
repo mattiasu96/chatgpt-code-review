@@ -2,7 +2,7 @@ import re
 from typing import Optional
 
 import streamlit as st
-from utils import EXTENSION_TO_LANGUAGE_MAP
+from chatgpt_code_review.utils import EXTENSION_TO_LANGUAGE_MAP
 
 
 def extension_to_language(file_extension: str) -> Optional[str]:

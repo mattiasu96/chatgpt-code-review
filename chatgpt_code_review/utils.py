@@ -1,5 +1,6 @@
 import logging
 import os
+import streamlit as st
 
 EXTENSION_TO_LANGUAGE_MAP = {
     ".py": "python",
@@ -47,3 +48,16 @@ class TempDirContext:
 
     def __exit__(self, exc_type, exc_value, traceback):
         os.chdir(self.cwd)
+
+
+def remove_sidebar():
+    st.markdown(
+        """
+    <style>
+        [data-testid="collapsedControl"] {
+            display: none
+        }
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )

@@ -1,4 +1,4 @@
-import display
+from chatgpt_code_review import display
 import streamlit as st
 
 
